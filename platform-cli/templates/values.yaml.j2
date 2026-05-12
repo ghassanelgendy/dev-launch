@@ -1,0 +1,31 @@
+nameOverride: {{ app_name }}
+
+image:
+  repository: {{ image.repository }}
+  tag: {{ image.tag }}
+  pullPolicy: IfNotPresent
+
+replicaCount: {{ replicas }}
+
+service:
+  port: {{ container.port }}
+
+ingress:
+  enabled: true
+  host: {{ domain }}
+
+resources:
+  requests:
+    cpu: {{ resources.requests.cpu | default('100m') }}
+    memory: {{ resources.requests.memory | default('128Mi') }}
+  limits:
+    cpu: {{ resources.limits.cpu | default('200m') }}
+    memory: {{ resources.limits.memory | default('256Mi') }}
+
+health:
+  path: {{ health.path | default('/health') }}
+  initialDelaySeconds: {{ health.initial_delay_seconds | default(5) }}
+
+monitoring:
+  enabled: {{ monitoring.enabled | default(false) }}
+  path: {{ monitoring.metrics_path | default('/metrics') }}

@@ -1,0 +1,31 @@
+nameOverride: payments-api
+
+image:
+  repository: payments-api
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+service:
+  port: 8000
+
+ingress:
+  enabled: true
+  host: payments-staging.example.com
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+health:
+  path: /health
+  initialDelaySeconds: 10
+
+monitoring:
+  enabled: True
+  path: /metrics

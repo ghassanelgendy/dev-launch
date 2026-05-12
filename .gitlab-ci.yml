@@ -1,0 +1,43 @@
+stages:
+  - validate
+  - build
+  - generate
+  - deploy
+
+variables:
+  DOCKER_IMAGE: "123456789.dkr.ecr.eu-west-1.amazonaws.com/payments-api"
+
+validate-config:
+  stage: validate
+  image: python:3.11-slim
+  script:
+    - pip install -r platform-cli/requirements.txt
+    - python platform-cli/validate.py app-configs/payments-api.yaml
+
+build-image:
+  stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  script:
+    - docker build -t $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA ./sample-app
+    # - docker push $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA
+
+generate-values:
+  stage: generate
+  image: python:3.11-slim
+  script:
+    - pip install -r platform-cli/requirements.txt
+    - python platform-cli/generate.py app-configs/payments-api.yaml gitops/apps/payments-api/values.yaml
+  artifacts:
+    paths:
+      - gitops/apps/payments-api/values.yaml
+
+# In a real scenario, this stage would commit the generated values.yaml back to the GitOps repo
+sync-gitops:
+  stage: deploy
+  script:
+    - echo "Committing generated values to GitOps repo..."
+    # - git add gitops/apps/payments-api/values.yaml
+    # - git commit -m "Deploy payments-api $CI_COMMIT_SHORT_SHA"
+    # - git push origin main

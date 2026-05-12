@@ -1,0 +1,30 @@
+app_name: payments-api
+environment: staging
+
+image:
+  repository: payments-api
+  tag: v1.0.0
+
+container:
+  port: 8000
+
+replicas: 2
+
+domain: payments-staging.example.com
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+health:
+  enabled: true
+  path: /health
+  initial_delay_seconds: 10
+
+monitoring:
+  enabled: true
+  metrics_path: /metrics
