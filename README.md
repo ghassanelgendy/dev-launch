@@ -104,8 +104,9 @@ env:
 
 Validation should fail fast if required fields are missing or invalid:
 
+- configuration keys use `snake_case` (for example, `app_name`, `initial_delay_seconds`)
 - `app_name`, `environment`, `domain`
-- valid `container.port` (1–65535)
+- valid `container.port` (1–65535; note ports below 1024 may require elevated privileges/capabilities)
 - integer `replicas`
 - resource requests/limits
 - health path when health is enabled
@@ -194,6 +195,11 @@ Image convention:
 ```text
 <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<app_name>:<commit_sha>
 ```
+
+Recommended tagging strategy for easier rollback and traceability:
+
+- immutable commit SHA tag (required)
+- optional semantic version tag (for example, `v1.2.0`)
 
 ## GitOps with Flux CD
 
