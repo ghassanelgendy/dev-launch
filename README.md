@@ -66,7 +66,7 @@ environment: staging
 
 image:
   repository: payments-api
-  tag: latest
+  tag: v1.0.0
 
 container:
   port: 8000
@@ -106,7 +106,7 @@ Validation should fail fast if required fields are missing or invalid:
 
 - configuration keys use `snake_case` (for example, `app_name`, `initial_delay_seconds`)
 - `app_name`, `environment`, `domain`
-- valid `container.port` (1–65535; note ports below 1024 may require elevated privileges/capabilities)
+- valid `container.port` (1–65535; ports below 1024 may require elevated privileges, so prefer `>=1024` for standard app containers)
 - integer `replicas`
 - resource requests/limits
 - health path when health is enabled
@@ -252,6 +252,7 @@ Two rollback paths should be documented and tested:
 ### Helm rollback (fast)
 
 ```bash
+helm history payments-api
 helm rollback payments-api 1
 ```
 
